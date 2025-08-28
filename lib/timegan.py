@@ -41,7 +41,7 @@ class BaseModel():
     self.data_num, _, _ = np.asarray(ori_data).shape    # 3661; 24; 6
     self.trn_dir = os.path.join(self.opt.outf, self.opt.name, 'train')
     self.tst_dir = os.path.join(self.opt.outf, self.opt.name, 'test')
-    self.device = torch.device("cuda:0" if self.opt.device != 'cpu' else "cpu")
+    self.device = torch.device("cuda:0" if self.opt.device != 'cpu' and torch.cuda.is_available() else "cpu")
 
   def seed(self, seed_value):
     """ Seed
