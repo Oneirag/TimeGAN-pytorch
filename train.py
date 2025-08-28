@@ -52,5 +52,8 @@ def train():
     # TRAIN MODEL
     model.train()
 
+    return model
+
 if __name__ == '__main__':
-    train()
+    model = train()
+
