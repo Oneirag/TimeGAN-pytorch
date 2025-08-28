@@ -184,6 +184,7 @@ class BaseModel:
             self.train_one_iter_s()
             if iter % n_iters_print == 0:
                 print('Superviser training step: ' + str(iter) + '/' + str(self.opt.iteration))
+                print("Loss S: ", self.err_s)
 
         for iter in tqdm(range(self.opt.iteration)):
             # Train for one iter
@@ -232,12 +233,12 @@ class BaseModel:
         print(metric_results)
         return metric_results
 
-    def generation(self, num_samples, mean=0.0, std=1.0):
+    def generation(self, num_samples):
         if num_samples == 0:
             return None, None
         ## Synthetic data generation
         self.X0, self.T = batch_generator(self.ori_data, self.ori_time, self.opt.batch_size)
-        self.Z = random_generator(num_samples, self.opt.z_dim, self.T, self.max_seq_len, mean, std)
+        self.Z = random_generator(num_samples, self.opt.z_dim, self.T, self.max_seq_len)
         self.Z = torch.tensor(self.Z, dtype=torch.float32).to(self.device)
         self.E_hat = self.netg(self.Z)  # [?, 24, 24]
         self.H_hat = self.nets(self.E_hat)  # [?, 24, 24]
@@ -391,7 +392,7 @@ class TimeGAN(BaseModel):
         """
         self.err_s = self.l_mse(self.H[:, 1:, :], self.H_supervise[:, :-1, :])
         self.err_s.backward(retain_graph=True)
-        print("Loss S: ", self.err_s)
+
 
     #   print(torch.autograd.grad(self.err_s, self.nets.parameters()))
 
