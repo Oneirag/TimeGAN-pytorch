@@ -184,7 +184,7 @@ class BaseModel:
             self.train_one_iter_s()
             if iter % n_iters_print == 0:
                 print('Superviser training step: ' + str(iter) + '/' + str(self.opt.iteration))
-                print("Loss S: ", self.err_s)
+                print("Loss S: ", self.err_s.item())
 
         for iter in tqdm(range(self.opt.iteration)):
             # Train for one iter
@@ -195,7 +195,7 @@ class BaseModel:
             self.train_one_iter_d()
             if iter % n_iters_print == 0:
                 print('Superviser training step: ' + str(iter) + '/' + str(self.opt.iteration))
-                print("Loss G: ", self.err_g)
+                print("Loss G: ", self.err_g.item())
 
         self.save_weights(self.opt.iteration)
         self.generated_data = self.generation(self.opt.batch_size)
